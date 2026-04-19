@@ -1,18 +1,22 @@
 import type { TaskConfig } from '@browserclijs/browser-cli'
 
 /**
- * Demo scheduled task: runs hn/top every morning and notifies on changes to
- * the #1 story. Users copy this into their own ~/.browser-cli/tasks/ with
+ * Demo scheduled task: runs sub/hn/top every morning.
+ *
+ * Users copy this into their own ~/.browser-cli/tasks/ and enable it:
  *   browser-cli sub copy sub/hn-daily
- * then enable it with:
  *   browser-cli task enable hn-daily
+ *
+ * To get notifications on changes to #1, add a `notify` block with your
+ * channel name (see `browser-cli notify channel list` for yours), e.g.:
+ *   notify: {
+ *     channels: ['bark-personal'],
+ *     onChangeTemplate:
+ *       'HN #1 changed!\n{{ before.stories.0.title }}\n→ {{ after.stories.0.title }}',
+ *   }
  */
 export const config: TaskConfig = {
   workflow: 'sub/hn/top',
   args: { limit: 10 },
   schedule: '0 9 * * *',
-  notify: {
-    onChangeTemplate:
-      'HN #1 changed!\n{{ before.stories.0.title }} → {{ after.stories.0.title }}',
-  },
 }
